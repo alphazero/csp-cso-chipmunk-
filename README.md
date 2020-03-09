@@ -1,20 +1,20 @@
 ## Communicable Stack Objects for Go
 
      
-###`about`
+### `about`
 This document explores the semantics of a modified Go language. It is not a formal specification. That said, we aim to sufficiently define and highlight changes to existing Go langauge so that the existing Go Language Specifications can form an effective and substantial starting point for a formal specification.
 
 The impetus for the work was an interesting conversation in the Go language usenet forum (golang-nuts) centered around introducing some of the foundational ideas of a 'safe' language (Rust and Rust object ownership features, to be specific). Given the relatively limited type system machinery provided by Go, characteristic of its practical usability user niche, the type-system based approach of languages such as Rust and Haskell effectively would require a full rethink of the Go language. 
 
 So that's the background. And the result here is an example of how close we can get to the ideal concurrent programming language -- safe, efficient, reasonable -- with Go (1.5) as the starting point. And how to do this without drowning the concurrent logic (and the programmer) in a bed of syntactic structures, metadata, and rocket-science type systems.
 
-####`stat`
+#### `stat`
 
      stardate: 55ddf81c
      state:    draft-init-braindump
      
 
-###`meta-musings`
+### `meta-musings`
 The current trend in research and development of addressing the challenges of concurrent programming is to rely on semantic structures (type systems) and existing algebraic logic machinery to inject 'semantic intent' into the mix of inputs given to a compiler (or interpretive runtime). While this is clearly a viable and rigorous approach (validated by a number of successful languages), it demands a certain degree of sophistication from the user. It may even be argued that the required sophistication is unreasonable given that the substantial majority of code written are (in terms of domain mechanics) rather mundane variations on the general theme of book-keeping.
 
 Reflecting on our (perceived) reality, we note that we inhabit a highly concurrent world of many actors. Sure we bump into things and each other, but the world remains 'consistent' regardless of our haphazard meanderings and the apparent fact of a lack of a 'global coordinator'. Another interesting observation is that our (perceived) reality is fundamentally governed by thermodynamics, which given an appropriately vigorous squint, is really about how things (matter, energy) shuffle from place to place: dynamics. And further that 'form' (think 'type') is not a primary parameter. What seems to govern our concurrent order are the (perceived) facts of 'spaces', 'objects', 'Pauli Exclusion', and 'pathways of movement'. (Semantics only enter into the (concurrent) picture when perceptions of reality are subject to the psychological machinery of the sentient.) 
@@ -23,7 +23,7 @@ So it appears that interactivity governed by a purely spatial regime (and not fo
 
 Certainly this is not a novel view. In fact CSP, and message based interactivity in general, can be viewed precisely as the spatial approach to concurrency. The issue has never been the conceptual clarity, but rather the performance penalty exacted by uniform copy-on-send semantics of the message passing paradigms.
 
-###`so what is a C.S.O.?`
+### `so what is a C.S.O.?`
 
 The general CSP approach is purely logical, and (to my knowledge) does not address the discreet reality of the substrate that support distributed systems. Accordingly, CSP is actor and periphery centric. 
 
@@ -46,7 +46,7 @@ So while the semantics of message ownership in CSP can be defined by a single pa
     
 Given this altered view, CSO can augment CSP by defining 'identity' and 'ownership' semantics of the messages exchanges by CSPs in terms of the modality of the 'passage' of the message. CSOs maintain their unique identity as they transition from one actor value space to another. In a way, we are treating message objects as passive mobile agent.
 
-###`memory object modalities`
+### `memory object modalities`
 
 Memory objects are typically considered heap or stack objects. CSO introduces an additional modality of communicable stack objects. The transitions between these modalities are well defined.
 
@@ -66,7 +66,7 @@ Memory objects are typically considered heap or stack objects. CSO introduces an
 
 ![alt](./images/memobj-mode-transitions.jpg)
 
-###`memory object conversion (patterns)`
+### `memory object conversion (patterns)`
 
 Heap and/or stack object is converted to an CSO on a channel send.
 
@@ -189,7 +189,7 @@ What about function calls? What about passing CSO references to 3rd party librar
 
 So we'll see that the CSO invariants hold under composition, given a slight change to goroutine initialization semantics.
          
-###`the hermetic existence of the monadic chipmunk`
+### `the hermetic existence of the monadic chipmunk`
 
 Goroutines in Go are communal: they can share memory. Goroutines in the CSP/CSO scheme, in contrast, live the monastic life. They share nothing and interact only via CSO objects (messages). It would appear that the scheduling regime ( pre-emptive, run-to-completion, etc.) does not affect the CSO semantics and the required isolation. But goroutine creation semantics require a slight adjustment.
 
